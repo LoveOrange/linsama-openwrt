@@ -1,0 +1,44 @@
+name: Build OpenWrt
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install Dependencies
+      run: sudo apt-get update && sudo apt-get install -y build-essential libncurses5-dev libncursesw5-dev zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip python
+
+    - name: Clone OpenWrt repository
+      run: git clone https://github.com/openwrt/openwrt.git
+
+    - name: Add custom feeds
+      run: |
+        echo 'src-git small_package git://github.com/kenzok8/small-package.git' >> openwrt/feeds.conf.default
+
+    - name: Update Feeds
+      run: |
+        cd openwrt
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+
+    # Add additional steps here to configure and build your OpenWrt image
+
+    - name: Archive Production Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: openwrt-image
+        path: openwrt/bin
+
+# Add more steps as necessary for your build process
+
