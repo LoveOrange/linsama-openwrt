@@ -24,7 +24,7 @@ jobs:
 
     - name: Add custom feeds
       run: |
-        echo 'src-git small_package git://github.com/kenzok8/small-package.git' >> openwrt/feeds.conf.default
+        echo 'src-git small_package https://github.com/kenzok8/small-package.git' >> openwrt/feeds.conf.default
 
     - name: Update Feeds
       run: |
