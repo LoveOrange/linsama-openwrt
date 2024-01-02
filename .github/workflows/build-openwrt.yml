@@ -32,13 +32,19 @@ jobs:
         ./scripts/feeds update -a
         ./scripts/feeds install -a
 
-    # Add additional steps here to configure and build your OpenWrt image
+    - name: Load Custom Configuration
+      run: |
+        cp ./config/default.config openwrt/.config
+        cd openwrt
+        make defconfig
+
+    - name: Compile OpenWrt
+      run: |
+        cd openwrt
+        make -j$(nproc)
 
     - name: Archive Production Artifacts
       uses: actions/upload-artifact@v2
       with:
         name: openwrt-image
         path: openwrt/bin
-
-# Add more steps as necessary for your build process
-
