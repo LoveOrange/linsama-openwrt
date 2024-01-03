@@ -41,7 +41,7 @@ jobs:
     - name: Compile OpenWrt
       run: |
         cd openwrt
-        make -j1
+        make -j1 V=s
 
     - name: Archive Production Artifacts
       uses: actions/upload-artifact@v2
